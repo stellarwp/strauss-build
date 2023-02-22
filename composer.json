@@ -19,7 +19,7 @@
     "require": {
         "composer/composer": "*",
         "json-mapper/json-mapper": "^2.2",
-        "php": "^7.1|^8.0",
+        "php": "^7.4|^8.0",
         "symfony/console": "^4|^5",
         "symfony/finder": "^4|^5",
         "league/flysystem": "^1.0"

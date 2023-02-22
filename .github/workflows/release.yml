@@ -35,7 +35,7 @@ jobs:
             - uses: meeDamian/github-release@2.0
               with:
                   token: ${{ secrets.GH_BOT_TOKEN }}
-                  files: stellar-build.phar
+                  files: strauss-build.phar
                   gzip: false
                   allow_override: true
 

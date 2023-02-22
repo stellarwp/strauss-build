@@ -2,7 +2,6 @@
 
 namespace StellarWP\Strauss\Console;
 
-use BrianHenryIE\Strauss\Console\Commands\Compose;
 use Symfony\Component\Console\Application as BaseApplication;
 
 class Application extends BaseApplication

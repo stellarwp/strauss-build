@@ -1,5 +1,7 @@
 <?php
 
+namespace StellarWP\Strauss\Console\Commands;
+
 use Composer\Command\Command;
 use Composer\Plugin\PluginInterface;
 

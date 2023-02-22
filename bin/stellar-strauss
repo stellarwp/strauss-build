@@ -1,8 +1,6 @@
 #!/usr/bin/env php
 <?php
-$command_args = ! empty( $argv[1] ) ? $argv[1] : 'install';
-
-call_user_func(function ($version) use ($command_args) {
+call_user_func(function ($version) use ($argv) {
     if( ! Phar::running() ) {
         if (is_file($autoload = getcwd() . '/vendor/autoload.php')) {
             require $autoload;
@@ -27,5 +25,5 @@ call_user_func(function ($version) use ($command_args) {
     }
 
     $app = new StellarWP\Strauss\Console\Application($version);
-    $app->run(new \Symfony\Component\Console\Input\ArgvInput($command_args));
+    $app->run(new \Symfony\Component\Console\Input\ArrayInput($argv), new \Symfony\Component\Console\Output\ConsoleOutput());
 }, '0.1.1.2');

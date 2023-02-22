@@ -2,11 +2,13 @@
 
 namespace StellarWP\Strauss\Console\Commands;
 
-use Composer\Command\Command;
-use Composer\Plugin\PluginInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
-class Build implements PluginInterface, Command
+class Build extends Command
 {
 	private $command;
 	private $io;
@@ -15,9 +17,10 @@ class Build implements PluginInterface, Command
 	private $scripts = [];
 	private $targetDirectory = 'vendor-prefixed';
 
-	public function activate(Composer $composer, IOInterface $io)
-	{
-		$this->io = $io;
+	protected function configure() {
+		$this->setName( 'build' );
+		$this->setDescription( 'Runs Strauss in a fault-tolerant way.' );
+		$this->setHelp( '' );
 	}
 
 	public function getDefinition()
@@ -27,9 +30,11 @@ class Build implements PluginInterface, Command
 		];
 	}
 
-	public function configure(InputInterface $input, OutputInterface $output)
+	public function execute(InputInterface $input, OutputInterface $output)
 	{
 		$this->command = $input->getOption('command') ?? 'install';
+		var_dump( $this->command );
+		die;
 
 		$composerJson = json_decode(file_get_contents('composer.json'), true);
 		if (isset($composerJson['extra']['strauss']['target_directory'])) {
@@ -47,12 +52,6 @@ class Build implements PluginInterface, Command
 		if (isset($composerJson['extra']['stellar-strauss']['scripts'])) {
 			$this->scripts = $composerJson['extra']['stellar-strauss']['scripts'];
 		}
-	}
-
-	public function execute(InputInterface $input, OutputInterface $output)
-	{
-		$command = $input->getOption('command');
-		$positional_args = $input->getArgument('args');
 
 		if (file_exists('.strauss-rebuild')) {
 			// Run Strauss
@@ -64,11 +63,8 @@ class Build implements PluginInterface, Command
 		} else {
 			// Prep directories for Strauss build
 			$output->writeln('Prepping directories for a Strauss build...');
-			if (!file_exists($straussPath)) {
-				$currentDir = getcwd();
-				chdir('bin');
-				passthru("curl -o $strauss -L -C - https://github.com/BrianHenryIE/strauss/releases/download/{$this->straussVersion}/strauss.phar")
-				chdir($currentDir);
+			if (!file_exists($this->straussPath)) {
+				passthru("curl -o {$this->straussPath} -L -C - https://github.com/BrianHenryIE/strauss/releases/download/{$this->straussVersion}/strauss.phar");
 			}
 
 			// Find all namespaced packages in the strauss directory
@@ -127,10 +123,8 @@ class Build implements PluginInterface, Command
 	private function runPostCommandScripts()
 	{
 		foreach ($this->scripts as $script) {
-			if ($script !== $positional_args[0]) {
-				$this->io->write(sprintf("Executing %s...\n", $script));
-				passthru($script);
-			}
+			$this->io->write(sprintf("Executing %s...\n", $script));
+			passthru($script);
 		}
 	}
 

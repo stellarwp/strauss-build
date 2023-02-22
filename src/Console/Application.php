@@ -13,7 +13,7 @@ class Application extends BaseApplication
 	{
 		parent::__construct('stellar-strauss', $version);
 
-		$composeCommand = new Commands\Builder();
+		$composeCommand = new Commands\Build();
 		$this->add($composeCommand);
 
 		$this->setDefaultCommand('build');

@@ -1,0 +1,27 @@
+{
+    "name": "matt/strauss-build",
+    "description": "Helper scripts for handling Strauss builds",
+    "authors": [
+        {
+            "name": "StellarWP Engineering",
+            "email": "vendors@stellarwp.com"
+        }
+    ],
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "bin": ["bin/stellar-strauss"],
+    "autoload": {
+        "psr-4": {
+            "StellarWP\\Strauss\\": "src/"
+        }
+    },
+    "require": {
+        "composer/composer": "*",
+        "json-mapper/json-mapper": "^2.2",
+        "php": "^7.1|^8.0",
+        "symfony/console": "^4|^5",
+        "symfony/finder": "^4|^5",
+        "league/flysystem": "^1.0"
+    }
+}
